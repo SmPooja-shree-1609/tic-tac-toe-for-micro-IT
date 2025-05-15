@@ -1,0 +1,124 @@
+<!-- game.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Toe - Game</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    h2 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .board {
+      display: grid;
+      gap: 8px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .cell {
+      width: 80px;
+      height: 80px;
+      background-color: #f0f0f0;
+      font-size: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .cell:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h2 id="player-turn">Current Turn: X</h2>
+  <div id="board" class="board"></div>
+
+  <script>
+    const boardEl = document.getElementById("board");
+    const gridSize = parseInt(localStorage.getItem("gridSize") || 3);
+    const playerTurn = document.getElementById("player-turn");
+
+    let board = [];
+    let currentPlayer = "X";
+    let moves = 0;
+
+    // Setup board
+    boardEl.style.gridTemplateColumns = `repeat(${gridSize}, 80px)`;
+    for (let i = 0; i < gridSize; i++) {
+      board[i] = [];
+      for (let j = 0; j < gridSize; j++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.row = i;
+        cell.dataset.col = j;
+        cell.addEventListener("click", handleClick);
+        boardEl.appendChild(cell);
+        board[i][j] = "";
+      }
+    }
+
+    function handleClick(e) {
+      const row = e.target.dataset.row;
+      const col = e.target.dataset.col;
+
+      if (board[row][col] !== "") return;
+
+      board[row][col] = currentPlayer;
+      e.target.textContent = currentPlayer;
+      moves++;
+
+      if (checkWin(row, col)) {
+        localStorage.setItem("result", `${currentPlayer} wins`);
+        return window.location.href = "result.html";
+      }
+
+      if (moves === gridSize * gridSize) {
+        localStorage.setItem("result", "Draw");
+        return window.location.href = "result.html";
+      }
+
+      currentPlayer = currentPlayer === "X" ? "O" : "X";
+      playerTurn.textContent = `Current Turn: ${currentPlayer}`;
+    }
+
+    function checkWin(row, col) {
+      row = parseInt(row);
+      col = parseInt(col);
+
+      // Row
+      if (board[row].every(cell => cell === currentPlayer)) return true;
+      // Column
+      if (board.map(r => r[col]).every(cell => cell === currentPlayer)) return true;
+      // Main Diagonal
+      if (row === col && board.every((r, i) => r[i] === currentPlayer)) return true;
+      // Anti-Diagonal
+      if (row + col === gridSize - 1 && board.every((r, i) => r[gridSize - 1 - i] === currentPlayer)) return true;
+
+      return false;
+    }
+  </script>
+</body>
+</html>

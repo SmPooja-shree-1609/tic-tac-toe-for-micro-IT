@@ -1,0 +1,64 @@
+<!-- result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Toe - Result</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    h2 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .result {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .btn {
+      font-size: 1.5rem;
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="result">
+    <h2 id="result-message"></h2>
+    <button class="btn" onclick="window.location.href='index.html'">Play Again</button>
+  </div>
+
+  <script>
+    const resultMessage = document.getElementById("result-message");
+    const result = localStorage.getItem("result");
+    resultMessage.textContent = result;
+  </script>
+</body>
+</html>
